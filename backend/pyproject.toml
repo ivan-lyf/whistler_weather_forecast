@@ -11,7 +11,13 @@ dependencies = [
     "psycopg[binary]>=3.2",
     "alembic>=1.14",
     "httpx>=0.28",
+    "pandas>=2.2",
+    "numpy>=1.26",
+    "scikit-learn>=1.4",
 ]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
 
 [project.optional-dependencies]
 dev = [

@@ -3,6 +3,7 @@ from app.models.location import Location
 from app.models.observation import ObsHourly
 from app.models.resort_snapshot import ResortForecastSnapshot
 from app.models.station import Station
+from app.models.training_label import TrainingLabel
 
 __all__ = [
     "ForecastRun",
@@ -11,4 +12,5 @@ __all__ = [
     "ObsHourly",
     "ResortForecastSnapshot",
     "Station",
+    "TrainingLabel",
 ]

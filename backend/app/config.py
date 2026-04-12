@@ -5,6 +5,8 @@ class Settings(BaseSettings):
     database_url: str = "postgresql+psycopg://postgres:postgres@localhost:5433/whistler_forecast"
     env: str = "development"
     openmeteo_base_url: str = "https://api.open-meteo.com/v1"
+    openmeteo_archive_url: str = "https://archive-api.open-meteo.com/v1/archive"
+    openmeteo_historical_forecast_url: str = "https://historical-forecast-api.open-meteo.com/v1/forecast"
     geomet_base_url: str = "https://api.weather.gc.ca"
     whistler_forecast_url: str = "https://www.whistlerblackcomb.com/the-mountain/mountain-conditions/snow-and-weather-report"
 

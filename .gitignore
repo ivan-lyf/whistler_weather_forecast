@@ -35,6 +35,7 @@ data/
 *.parquet
 *.csv
 *.pkl
+baseline_report.json
 *.joblib
 
 # Notebooks
