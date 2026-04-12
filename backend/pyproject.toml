@@ -1,0 +1,20 @@
+[project]
+name = "whistler-forecast"
+version = "0.1.0"
+description = "Mountain-specific forecast correction system for Whistler Blackcomb"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.34",
+    "pydantic-settings>=2.7",
+    "sqlalchemy>=2.0",
+    "psycopg[binary]>=3.2",
+    "alembic>=1.14",
+    "httpx>=0.28",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.9",
+    "pytest>=8.0",
+]
