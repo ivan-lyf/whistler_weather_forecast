@@ -10,6 +10,20 @@ class Settings(BaseSettings):
     geomet_base_url: str = "https://api.weather.gc.ca"
     whistler_forecast_url: str = "https://www.whistlerblackcomb.com/the-mountain/mountain-conditions/snow-and-weather-report"
 
+    # CORS: comma-separated origins, e.g. "http://localhost:3000,https://whistler.example.com"
+    cors_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
+
+    # DB connection pool
+    db_pool_size: int = 10
+    db_max_overflow: int = 20
+    db_pool_pre_ping: bool = True
+
+    # Twilio SMS alerts
+    twilio_account_sid: str = ""
+    twilio_auth_token: str = ""
+    twilio_phone_number: str = ""
+    alert_enabled: bool = False
+
     model_config = {"env_file": "../.env", "env_file_encoding": "utf-8"}
 
 

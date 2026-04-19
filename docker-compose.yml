@@ -16,5 +16,78 @@ services:
       timeout: 5s
       retries: 5
 
+  backend:
+    build: ./backend
+    container_name: whistler_backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@db:5432/whistler_forecast
+      ENV: production
+      CORS_ORIGINS: "http://localhost:3000,http://127.0.0.1:3000"
+      DB_POOL_SIZE: "10"
+      DB_MAX_OVERFLOW: "20"
+      DB_POOL_PRE_PING: "true"
+      OPENMETEO_BASE_URL: https://api.open-meteo.com/v1
+      OPENMETEO_ARCHIVE_URL: https://archive-api.open-meteo.com/v1/archive
+      OPENMETEO_HISTORICAL_FORECAST_URL: https://historical-forecast-api.open-meteo.com/v1/forecast
+      GEOMET_BASE_URL: https://api.weather.gc.ca
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend/models:/app/models
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:8000
+    container_name: whistler_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    depends_on:
+      - backend
+
+  # Daily pipeline — runs once then exits. Trigger via:
+  #   docker compose run --rm pipeline
+  pipeline:
+    build: ./backend
+    container_name: whistler_pipeline
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@db:5432/whistler_forecast
+      ENV: production
+      OPENMETEO_BASE_URL: https://api.open-meteo.com/v1
+      OPENMETEO_ARCHIVE_URL: https://archive-api.open-meteo.com/v1/archive
+      OPENMETEO_HISTORICAL_FORECAST_URL: https://historical-forecast-api.open-meteo.com/v1/forecast
+      GEOMET_BASE_URL: https://api.weather.gc.ca
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend/models:/app/models
+    command: python scripts/daily_pipeline.py
+    profiles:
+      - pipeline
+
+  # Retrain — runs once then exits. Trigger via:
+  #   docker compose run --rm retrain
+  retrain:
+    build: ./backend
+    container_name: whistler_retrain
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@db:5432/whistler_forecast
+      ENV: production
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend/models:/app/models
+    command: python scripts/retrain_models.py
+    profiles:
+      - retrain
+
 volumes:
   whistler_db_data:

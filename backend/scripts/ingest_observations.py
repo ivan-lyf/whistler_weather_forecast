@@ -259,6 +259,11 @@ def ingest_openmeteo(db, client: httpx.Client, start: date, end: date):
             log.warning("[open_meteo] %s: No data returned", name)
             continue
 
+        # Validate timezone from API response
+        api_tz = data.get("timezone", "")
+        if api_tz not in ("GMT", "UTC", ""):
+            log.warning("[open_meteo] %s: Unexpected timezone: %s (expected UTC/GMT)", name, api_tz)
+
         total_inserted = 0
         batch = []
 

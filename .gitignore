@@ -36,6 +36,10 @@ data/
 *.csv
 *.pkl
 baseline_report.json
+snowfall_model_report.json
+*_report.json
+model_evaluation_report.json
+models/
 *.joblib
 
 # Notebooks

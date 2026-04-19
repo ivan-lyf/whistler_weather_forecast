@@ -186,6 +186,11 @@ def ingest_historical_forecast(
                 log.warning("No data returned for %s %s-%s", location.name, chunk_start, chunk_end)
                 continue
 
+            # Validate timezone
+            api_tz = data.get("timezone", "")
+            if api_tz not in ("GMT", "UTC", ""):
+                log.warning("Unexpected timezone from API: %s (expected UTC/GMT)", api_tz)
+
             # Group time entries by date
             time_entries = []
             for i, time_str in enumerate(times):

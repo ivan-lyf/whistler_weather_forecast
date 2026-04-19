@@ -99,14 +99,16 @@ def compute_labels(obs_df: pd.DataFrame, eccc_temp_df: pd.DataFrame) -> pd.DataF
         label_6h_wind = wind.rolling(6, min_periods=5).max()
         label_12h_wind = wind.rolling(12, min_periods=10).max()
 
-        # Precip type at this elevation
+        # Precip type at this elevation (4 classes: none, snow, rain, mixed)
         temp = stn["temperature_c"]
         precip = stn["precip_mm"]
         has_precip = precip > 0.1
-        precip_type = pd.Series(np.nan, index=stn.index, dtype=object)
+        precip_type = pd.Series("none", index=stn.index, dtype=object)
         precip_type[has_precip & (temp < 0)] = "snow"
         precip_type[has_precip & (temp > 2)] = "rain"
         precip_type[has_precip & (temp >= 0) & (temp <= 2)] = "mixed"
+        # Set NaN where we have no temperature or precip data
+        precip_type[temp.isna() | precip.isna()] = np.nan
 
         labels = pd.DataFrame({
             "location_id": location_id,
