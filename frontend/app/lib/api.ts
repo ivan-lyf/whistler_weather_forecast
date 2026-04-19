@@ -1,6 +1,9 @@
 import { z } from "zod";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API = process.env.NEXT_PUBLIC_API_URL;
+if (!API) {
+  throw new Error("NEXT_PUBLIC_API_URL is not set. Define it in .env.local (dev) or the hosting provider's env vars (prod).");
+}
 
 // ---------------------------------------------------------------------------
 // Schemas (Zod validation for API responses)

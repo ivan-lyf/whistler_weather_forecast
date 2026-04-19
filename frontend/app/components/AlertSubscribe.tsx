@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API = process.env.NEXT_PUBLIC_API_URL;
+if (!API) {
+  throw new Error("NEXT_PUBLIC_API_URL is not set. Define it in .env.local (dev) or the hosting provider's env vars (prod).");
+}
 
 const TARGETS = [
   { value: "snowfall_24h", label: "24h Snowfall (cm)", defaultThreshold: 10 },
