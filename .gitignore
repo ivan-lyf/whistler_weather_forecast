@@ -39,7 +39,7 @@ baseline_report.json
 snowfall_model_report.json
 *_report.json
 model_evaluation_report.json
-models/
+/backend/models/
 *.joblib
 
 # Notebooks
