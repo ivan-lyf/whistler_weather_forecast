@@ -1,6 +1,16 @@
 from pydantic_settings import BaseSettings
 
 
+def _normalize_db_url(url: str) -> str:
+    # Railway/Heroku-style DATABASE_URL uses postgres:// or postgresql://,
+    # but we need the psycopg3 driver scheme.
+    if url.startswith("postgres://"):
+        url = "postgresql://" + url[len("postgres://"):]
+    if url.startswith("postgresql://"):
+        url = "postgresql+psycopg://" + url[len("postgresql://"):]
+    return url
+
+
 class Settings(BaseSettings):
     database_url: str = "postgresql+psycopg://postgres:postgres@localhost:5433/whistler_forecast"
     env: str = "development"
@@ -28,3 +38,4 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+settings.database_url = _normalize_db_url(settings.database_url)
